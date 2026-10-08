@@ -1,0 +1,11 @@
+services:
+  web:
+    build: .
+    environment:
+      # Defaults to the API running on the host (e.g. started from the BE repo).
+      API_URL: ${API_URL:-http://host.docker.internal:4000}
+    ports:
+      - "8080:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
