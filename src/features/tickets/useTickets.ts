@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ApiError, isAbortError } from '../services/apiClient';
-import { getTickets, updateTicket } from '../services/ticketService';
-import type { Ticket, TicketFilters, TicketStatus } from '../types/ticket';
+import { ApiError, isAbortError } from '../../lib/apiClient';
+import { getTickets, updateTicket } from './ticketApi';
+import type { Ticket, TicketFilters, TicketStatus } from './ticket.types';
 
 export function useTickets(filters: TicketFilters) {
   const [tickets, setTickets] = useState<Ticket[]>([]);
