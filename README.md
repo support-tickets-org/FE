@@ -4,18 +4,7 @@ React UI for the Support Tickets API, built with React 19, TypeScript and Vite.
 
 ## Setup
 
-Requirements: Node 20+, Docker. The API from the `BE` repo must be running on port 4000.
-
-### Docker
-
-```bash
-docker compose up -d --build
-```
-
-- UI: `http://localhost:8080`
-- Set `API_URL` to use a different API address. Default: `http://host.docker.internal:4000`.
-
-### Local development
+Requirements: Node 20+. The API from the `BE` repo must be running on port 4000.
 
 ```bash
 npm install
@@ -59,7 +48,6 @@ src/
 │   └── ticketService.ts
 ├── types/ticket.ts          copied from the API
 └── utils/validateTicket.ts
-nginx/default.conf.template
 ```
 
 ## Decisions
@@ -71,7 +59,8 @@ nginx/default.conf.template
 - **Search is debounced** by 300 ms. Changing a filter resets to page 1.
 - **Previous results stay visible** while the next page or search loads.
 - **Client validation** uses the same rules as the API. Server validation errors are shown per field.
-- **Same-origin API calls.** Vite proxies `/api` in development and nginx proxies it in Docker, so the API needs no CORS.
+- **Same-origin API calls.** Vite proxies `/api` to the API, so the API needs no CORS.
+- **No Docker for the UI.** The task asks for one bonus; Docker is used in the API repo only.
 - **No router, global state or UI library.** The app has one page.
 
 ## Trade-offs
