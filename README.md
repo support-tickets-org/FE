@@ -67,7 +67,7 @@ nginx/default.conf.template
 - **Plain `fetch`** with a custom hook. No data-fetching library.
 - **`useTickets`** depends on filter values, not the filters object, so it does not refetch on every render.
 - **`AbortController`** cancels the previous request when filters change, so stale responses are ignored.
-- **Optimistic status update.** The status changes immediately. On failure it rolls back to the last confirmed status and the row shows an error. Only the latest request per ticket can apply or roll back.
+- **Optimistic status update.** The status changes immediately. On failure the previous ticket is restored and the row shows an error.
 - **Search is debounced** by 300 ms. Changing a filter resets to page 1.
 - **Previous results stay visible** while the next page or search loads.
 - **Client validation** uses the same rules as the API. Server validation errors are shown per field.
@@ -77,6 +77,7 @@ nginx/default.conf.template
 ## Trade-offs
 
 - Types are copied from the API and must be kept in sync manually.
+- Rapid status changes on the same ticket are not coordinated. A failed earlier request can roll back a later change.
 - A ticket whose status changes stays in the list even if it no longer matches the status filter, until the next fetch.
 - The list refetches after a ticket is created instead of inserting it locally.
 - No tests for the UI.

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ApiError, isAbortError } from '../services/apiClient';
 import { getTickets, updateTicket } from '../services/ticketService';
 import type { Ticket, TicketFilters, TicketStatus } from '../types/ticket';
@@ -9,16 +9,6 @@ export function useTickets(filters: TicketFilters) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<ApiError | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
-
-  const ticketsRef = useRef(tickets);
-  useEffect(() => {
-    ticketsRef.current = tickets;
-  }, [tickets]);
-
-  // Per ticket: the last status the server confirmed, and the id of the newest request.
-  // Together they let an older, slower request neither overwrite nor roll back a newer change.
-  const confirmedStatus = useRef(new Map<number, TicketStatus>());
-  const latestRequest = useRef(new Map<number, number>());
 
   // Depend on the primitive values, not the filters object, so a new object
   // with the same values on every render doesn't trigger a refetch.
@@ -49,39 +39,25 @@ export function useTickets(filters: TicketFilters) {
 
   const refetch = useCallback(() => setReloadKey((key) => key + 1), []);
 
-  const setStatusLocally = (id: number, nextStatus: TicketStatus) =>
-    setTickets((current) =>
-      current.map((ticket) => (ticket.id === id ? { ...ticket, status: nextStatus } : ticket)),
-    );
+  const replaceTicket = (updated: Ticket) =>
+    setTickets((current) => current.map((t) => (t.id === updated.id ? updated : t)));
 
-  const updateStatus = useCallback(async (id: number, nextStatus: TicketStatus) => {
-    const ticket = ticketsRef.current.find((t) => t.id === id);
-    if (!ticket || ticket.status === nextStatus) return;
+  const updateStatus = useCallback(
+    async (id: number, nextStatus: TicketStatus) => {
+      const previous = tickets.find((t) => t.id === id);
+      if (!previous) return;
 
-    if (!confirmedStatus.current.has(id)) confirmedStatus.current.set(id, ticket.status);
-    const requestId = (latestRequest.current.get(id) ?? 0) + 1;
-    latestRequest.current.set(id, requestId);
-    const isLatest = () => latestRequest.current.get(id) === requestId;
+      replaceTicket({ ...previous, status: nextStatus });
 
-    setStatusLocally(id, nextStatus);
-
-    try {
-      const updated = await updateTicket(id, { status: nextStatus });
-      if (isLatest()) {
-        confirmedStatus.current.delete(id);
-        setTickets((current) => current.map((t) => (t.id === id ? updated : t)));
-      } else if (confirmedStatus.current.has(id)) {
-        confirmedStatus.current.set(id, updated.status);
+      try {
+        replaceTicket(await updateTicket(id, { status: nextStatus }));
+      } catch (err) {
+        replaceTicket(previous);
+        throw err;
       }
-    } catch (err) {
-      if (isLatest()) {
-        const rollbackTo = confirmedStatus.current.get(id) ?? ticket.status;
-        confirmedStatus.current.delete(id);
-        setStatusLocally(id, rollbackTo);
-      }
-      throw err;
-    }
-  }, []);
+    },
+    [tickets],
+  );
 
   return { tickets, total, loading, error, updateStatus, refetch };
 }
