@@ -1,4 +1,4 @@
-import { TicketsPage } from './pages/TicketsPage';
+import { TicketsPage } from './features/tickets/TicketsPage';
 
 export default function App() {
   return (

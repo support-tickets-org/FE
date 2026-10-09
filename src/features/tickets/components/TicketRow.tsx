@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { ApiError } from '../services/apiClient';
+import { ApiError } from '../../../lib/apiClient';
 import {
   PRIORITY_LABELS,
   STATUS_LABELS,
   TICKET_STATUSES,
   type Ticket,
   type TicketStatus,
-} from '../types/ticket';
+} from '../ticket.types';
 
 interface TicketRowProps {
   ticket: Ticket;

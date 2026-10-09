@@ -1,5 +1,5 @@
-import type { ApiError } from '../services/apiClient';
-import type { Ticket, TicketStatus } from '../types/ticket';
+import type { ApiError } from '../../../lib/apiClient';
+import type { Ticket, TicketStatus } from '../ticket.types';
 import { TicketRow } from './TicketRow';
 
 interface TicketListProps {

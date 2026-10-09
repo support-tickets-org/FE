@@ -38,17 +38,19 @@ src/
 ├── main.tsx
 ├── App.tsx
 ├── index.css
-├── pages/TicketsPage.tsx    filter state and layout
-├── components/              TicketFilters, TicketList, TicketRow, NewTicketForm, Pagination
-├── hooks/
-│   ├── useTickets.ts        fetching, stale request handling, optimistic status update
-│   └── useDebounce.ts
-├── services/
-│   ├── apiClient.ts         fetch wrapper, ApiError
-│   └── ticketService.ts
-├── types/ticket.ts          copied from the API
-└── utils/validateTicket.ts
+├── components/Pagination.tsx    shared UI
+├── hooks/useDebounce.ts         shared hook
+├── lib/apiClient.ts             fetch wrapper, ApiError
+└── features/tickets/
+    ├── TicketsPage.tsx          filter state and layout
+    ├── components/              TicketFilters, TicketList, TicketRow, NewTicketForm
+    ├── useTickets.ts            fetching, stale request handling, optimistic status update
+    ├── ticketApi.ts             ticket API calls
+    ├── ticket.types.ts          copied from the API
+    └── validateTicket.ts
 ```
+
+Code is grouped by feature. Each feature has its own folder under `features/`. Shared code lives in `components/`, `hooks/` and `lib/`.
 
 ## Decisions
 

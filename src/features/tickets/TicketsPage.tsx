@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { NewTicketForm } from '../components/NewTicketForm';
-import { Pagination } from '../components/Pagination';
-import { TicketFilters } from '../components/TicketFilters';
-import { TicketList } from '../components/TicketList';
-import { useDebounce } from '../hooks/useDebounce';
-import { useTickets } from '../hooks/useTickets';
-import type { TicketStatus } from '../types/ticket';
+import { NewTicketForm } from './components/NewTicketForm';
+import { Pagination } from '../../components/Pagination';
+import { TicketFilters } from './components/TicketFilters';
+import { TicketList } from './components/TicketList';
+import { useDebounce } from '../../hooks/useDebounce';
+import { useTickets } from './useTickets';
+import type { TicketStatus } from './ticket.types';
 
 const PAGE_SIZE = 10;
 

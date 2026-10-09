@@ -1,4 +1,4 @@
-import { TICKET_PRIORITIES, type CreateTicketInput } from '../types/ticket';
+import { TICKET_PRIORITIES, type CreateTicketInput } from './ticket.types';
 
 export type TicketFormErrors = Partial<Record<keyof CreateTicketInput, string>>;
 

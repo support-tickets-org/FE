@@ -1,8 +1,8 @@
 import { useState, type FormEvent } from 'react';
-import { ApiError } from '../services/apiClient';
-import { createTicket } from '../services/ticketService';
-import { PRIORITY_LABELS, TICKET_PRIORITIES, type CreateTicketInput } from '../types/ticket';
-import { validateTicket, type TicketFormErrors } from '../utils/validateTicket';
+import { ApiError } from '../../../lib/apiClient';
+import { createTicket } from '../ticketApi';
+import { PRIORITY_LABELS, TICKET_PRIORITIES, type CreateTicketInput } from '../ticket.types';
+import { validateTicket, type TicketFormErrors } from '../validateTicket';
 
 const EMPTY_FORM: CreateTicketInput = { title: '', description: '', priority: 'medium' };
 

@@ -1,11 +1,11 @@
-import { request } from './apiClient';
+import { request } from '../../lib/apiClient';
 import type {
   CreateTicketInput,
   PaginatedResponse,
   Ticket,
   TicketFilters,
   UpdateTicketInput,
-} from '../types/ticket';
+} from './ticket.types';
 
 export function getTickets(filters: TicketFilters, signal?: AbortSignal) {
   const params = new URLSearchParams({ page: String(filters.page), limit: String(filters.limit) });
